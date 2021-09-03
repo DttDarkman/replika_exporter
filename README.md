@@ -19,6 +19,12 @@ pip install selenium
 pip install bs4
 ```
 
+* HTML5lib
+
+```shell
+pip install html5lib
+```
+
 3. Download the [Repository Zip](https://github.com/DttDarkman/replika_exporter/archive/refs/heads/master.zip).
 4. Extract it to a folder.
 5. In the folder run Scraper.py, two windows will open one will be a cmd and the other a chrome browser. **Follow on screen instrutions in cmd.**
