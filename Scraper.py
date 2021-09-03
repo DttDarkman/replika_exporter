@@ -35,16 +35,10 @@ from time import sleep
 
 # Time in seconds to wait for browser to load to the top of the chat
 scroll_time = 5
-
-
 chrome = webdriver.Chrome(executable_path='chromedriver_win32/chromedriver.exe')
-chrome.get('https://my.replika.com')
-check = input("Please log in to your account on the browser and wait for page to finish completely loading,\nthen press enter in this window...")
-if check == "":
-    chrome.find_element_by_tag_name('main').click()
-    chrome.find_element_by_tag_name('body').send_keys(Keys.CONTROL + Keys.HOME)
-    print('Scrolling to top of chat...')
-    sleep(scroll_time)
+
+
+def scrap():
     source = BeautifulSoup(chrome.page_source, "html5lib")
     print("Got HTML Source!")
     print("Copying to file plaese wait...")
@@ -58,7 +52,35 @@ if check == "":
     input('Chat log copying complete and asve to "RepilkaChat.txt" in this dirctory.\nPress any key close...')
     chrome.quit()
 
-else:
-    print("!!! WHOOPS SOMTHING WENT WRONG :(")
-    input("press a key to exit...")
-    chrome.quit()
+def scroll(direction):
+    if direction == 'up':
+        chrome.find_element_by_tag_name('main').click()
+        chrome.find_element_by_tag_name('body').send_keys(Keys.CONTROL + Keys.HOME)
+        print('Scrolling to top of chat...')
+        sleep(scroll_time)
+    
+    if direction == 'down':
+        chrome.find_element_by_tag_name('main').click()
+        chrome.find_element_by_tag_name('body').send_keys(Keys.CONTROL + Keys.END)
+        print('Scrolling down a bit...')
+        sleep(1)
+
+
+chrome.get('https://my.replika.com')
+input("Please log in to your account on the browser and wait for page to finish completely loading,\nthen press enter in this window...")
+run = True
+while run:
+    scroll('up')
+    check = input('Are you at the top of your chat messages? Y/N:')
+    if check == 'Y' or check == 'y':
+        scrap()
+        exit()
+
+    if check == 'N' or check == 'n':
+        scroll('down')
+
+    else:
+        print("!!! WHOOPS SOMTHING WENT WRONG :(")
+        input("press a key to exit...")
+        chrome.quit()
+        exit()
